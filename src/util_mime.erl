@@ -223,9 +223,9 @@ from_ext(_)                 -> undefined.
 -include_lib(<<"eunit/include/eunit.hrl">>).
 
 from_ext_test() ->
-    ?assertEqual(<<"image/x-ico",
+    ?assertEqual(<<"image/x-ico">>,
                  from_ext(<<"ico">>)),
-    ?assertEqual(<<"text/html",
+    ?assertEqual(<<"text/html">>,
                  from_ext(<<"html">>)),
     ?assertEqual(undefined,
                  from_ext(<<"">>)),
