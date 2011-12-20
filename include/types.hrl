@@ -12,8 +12,6 @@
 -ifndef(TYPES_HRL).
 -define(TYPES_HRL, true).
 
--define(USE_GID, true).
-
 %% new proplist type introduced in R14B04
 %-type proplist()   :: [{atom(),any()} | atom()].
 
