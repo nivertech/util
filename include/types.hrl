@@ -42,6 +42,7 @@
                             datetime()
                         }
                     }. % unit.
+-ifndef(NO_ERLCLOUD_TYPES).
 -type(datetime() :: {{pos_integer(), 1..12, 1..31}, {0..23, 0..59, 0..60}}).
 %%------------------------------------------------------------------------------
 %% @doc StatisticSet
@@ -56,6 +57,6 @@
 }).
 -type statistic_set() :: #statistic_set{}.
 -type(proplist() :: [{atom(), term()}]).
-
+-endif. %% NO_ERLCLOUD_TYPES
 -endif. %% TYPES_HRL
 
