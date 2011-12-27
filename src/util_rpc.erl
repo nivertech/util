@@ -5,7 +5,7 @@
 %% @doc RPC utilities
 %%
 %% @author Zvi Avraham <zvi@nivertech.com>
-%% @copyright 2010-2011 Zvi Avraham
+%% @copyright 2010-2011 Nivertech (Nywhere Tech Ltd)
 %% @end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
