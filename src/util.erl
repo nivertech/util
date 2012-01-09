@@ -67,7 +67,8 @@
         %use_high_priority_if_needed/0,
          is_amazon_instance/0,
          get_amazon_instance_id/0,
-         get_amazon_public_hostname/0
+         get_amazon_public_hostname/0,
+         ip2str/1
         ]).
 
 -include_lib("include/types.hrl").
@@ -875,3 +876,13 @@ use_high_priority_if_needed() ->
             ok
     end.
 -endif.
+
+%% @doc convert IP address tuple to string, if string is given, it is unchanged
+%% @see floodtest:str2ip/1
+-spec ip2str(Str::string()|ipaddr()) -> string().
+ip2str(Str)
+    when is_list(Str) ->
+    Str;
+ip2str({A4,A3,A2,A1}) ->
+    ?FMT("~b.~b.~b.~b",[A4,A3,A2,A1]).
+
