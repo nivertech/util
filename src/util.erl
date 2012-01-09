@@ -68,7 +68,8 @@
          is_amazon_instance/0,
          get_amazon_instance_id/0,
          get_amazon_public_hostname/0,
-         ip2str/1
+         ip2str/1,
+         str2ip/1
         ]).
 
 -include_lib("include/types.hrl").
@@ -878,7 +879,7 @@ use_high_priority_if_needed() ->
 -endif.
 
 %% @doc convert IP address tuple to string, if string is given, it is unchanged
-%% @see floodtest:str2ip/1
+%% @see util:str2ip/1
 -spec ip2str(Str::string()|ipaddr()) -> string().
 ip2str(Str)
     when is_list(Str) ->
@@ -886,3 +887,19 @@ ip2str(Str)
 ip2str({A4,A3,A2,A1}) ->
     ?FMT("~b.~b.~b.~b",[A4,A3,A2,A1]).
 
+%% @doc convert string to IP address tuple, returns need_dns if
+%%      string does not contain an IP address but a URL
+%% @see util:ip2str/1
+-spec str2ip(Str::string()) -> ipaddr()|need_dns.
+str2ip(IPStr) ->
+	X = (catch list_to_tuple( [ list_to_integer(L) || L <- string:tokens(IPStr,".") ] )),
+	IsByte = fun(Y) -> is_integer(Y) and (0 =< Y) and (Y =< 255) end,
+	case X of 
+		{'EXIT',_} -> need_dns;
+		{A,B,C,D} ->
+			case IsByte(A) and IsByte(B) and IsByte(C) and IsByte(D) of
+				true -> X;
+				false -> need_dns
+			end
+	end.
+			 
