@@ -56,7 +56,7 @@
     sum             ::float()  %% The sum of values for the sample set.
 }).
 -type statistic_set() :: #statistic_set{}.
--type(proplist() :: [{atom(), term()}]).
+-type(proplist() :: [{atom(), term()}|term()]).
 -endif. %% NO_ERLCLOUD_TYPES
 -endif. %% TYPES_HRL
 
