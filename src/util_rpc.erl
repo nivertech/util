@@ -3,8 +3,8 @@
 %% Date: 25/08/2010
 %%
 %% @doc RPC utilities
+%% see: [http://levgem.livejournal.com/280954.html]
 %%
-%% @author Zvi Avraham <zvi@nivertech.com>
 %% @copyright 2010-2011 Nivertech (Nywhere Tech Ltd)
 %% @end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,7 +62,7 @@ call(Server, Event, TimeoutMS) ->
 %%
 %% A special intermediate process is created for collecting calls.
 %% Some of them may fail due timeout. You are warned.
-%% @done
+%% @end
 %%------------------------------------------------------------------------------
 -spec multicall(Pids::[pid()], What::term(), TimeoutMS::non_neg_integer()|infinity) -> [{pid(),term()}].%%TODO: | none().
 multicall(Pids, What, TimeoutMS) ->
