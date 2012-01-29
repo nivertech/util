@@ -907,7 +907,7 @@ str2ip(IPStr) ->
 %% @doc takes first N elements of a list
 -spec take(non_neg_integer(), list()) -> list().
 take(N, L) -> 
-    {FirstN, _} = split(N, L),
+    {FirstN, _} = lists:split(N, L),
     FirstN.
     
                   
