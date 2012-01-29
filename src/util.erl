@@ -69,7 +69,8 @@
          get_amazon_instance_id/0,
          get_amazon_public_hostname/0,
          ip2str/1,
-         str2ip/1
+         str2ip/1,
+         take/2
         ]).
 
 -include_lib("include/types.hrl").
@@ -903,3 +904,10 @@ str2ip(IPStr) ->
 			end
 	end.
 			 
+%% @doc takes first N elements of a list
+-spec take(non_neg_integer(), list()) -> list().
+take(N, L) -> 
+    {FirstN, _} = split(N, L),
+    FirstN.
+    
+                  
