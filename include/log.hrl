@@ -23,6 +23,12 @@
         end
 ).
 
+-define(IF(Condition,A),
+        case (Condition) of
+            true  -> (A);
+            false -> ok
+        end).
+
 -define(STRIP_OK(X),
         (case (X) of
              {ok, StripOKHiddenVariable} -> StripOKHiddenVariable
