@@ -29,6 +29,18 @@
             false -> ok
         end).
 
+-define(UNLESS(Condition,A,B),
+        case (Condition) of
+            false -> (A);
+            true  -> (B)
+        end).
+
+-define(UNLESS(Condition,A),
+        case (Condition) of
+            false -> (A);
+            true  -> ok
+        end).
+
 -define(STRIP_OK(X),
         (case (X) of
              {ok, StripOKHiddenVariable} -> StripOKHiddenVariable
