@@ -107,7 +107,7 @@
 %    -define(INFO( Fmt, Args), error_logger:info_msg("~p ~p:~p/~p :~p: " ++ Fmt, [node()] ++ ?CURRENT_FUNCTION ++ [?LINE | Args])).
     -define(INFO( Fmt, Args), error_logger:info_msg   ("~p ~p:~p/~p :~p: " ++ Fmt,  ?LOG_FMT_ARGS(Args))).
     %-define(DBG(  Fmt, Args), io:format               ("~p ~p:~p/~p :~p: " ++ Fmt,  ?LOG_FMT_ARGS(Args))).
-    -define(DBG(  Fmt, Args), ok).
+    -define(DBG(  Fmt, Args), error_logger:info_msg   ("~p ~p:~p/~p :~p: " ++ Fmt,  ?LOG_FMT_ARGS(Args))).
 
     -define(WARN( Fmt, Args), error_logger:warning_msg("~p ~p:~p/~p :~p: " ++ Fmt,  ?LOG_FMT_ARGS(Args))).
     -define(ERROR(Fmt, Args), error_logger:error_msg  ("~p ~p:~p/~p :~p: " ++ Fmt,  ?LOG_FMT_ARGS(Args))).
