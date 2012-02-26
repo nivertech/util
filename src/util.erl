@@ -680,43 +680,60 @@ is_amazon_instance() ->
 
 -spec get_amazon_instance_id() -> string()|undefined.
 get_amazon_instance_id() ->
-    case httpc:request("http://169.254.169.254/latest/meta-data/instance-id") of
-        {ok,{_,_,InstanceID}} ->
-            InstanceID;
-        {error, E} ->
-            ?WARN("get_amazon_instance_id failed with error ~p~n", [E]),
-            undefined
+    case get('instance-id') of
+        undefined ->
+            case httpc:request("http://169.254.169.254/latest/meta-data/instance-id") of
+                {ok,{_,_,InstanceID}} ->
+                    put('instance-id',InstanceID);
+                {error, E} ->
+                    ?WARN("get_amazon_instance_id failed with error ~p~n", [E]),
+                    undefined
+            end;
+        V -> 
+            V
     end.
 
 -spec get_amazon_public_hostname() -> string()|undefined.
 get_amazon_public_hostname() ->
-    case httpc:request("http://169.254.169.254/latest/meta-data/public-hostname") of
-        {ok,{_,_,PublicHostname}} ->
-            PublicHostname;
-        {error, E} ->
-            ?WARN("get_amazon_public_hostname with error ~p~n", [E]),
-            undefined
+    case get('public-hostname') of
+        undefined ->
+            case httpc:request("http://169.254.169.254/latest/meta-data/public-hostname") of
+                {ok,{_,_,PublicHostname}} ->
+                    put('public-hostname',PublicHostname);
+                {error, E} ->
+                    ?WARN("get_amazon_public_hostname with error ~p~n", [E]),
+                    undefined
+            end;
+        V ->
+            V
     end.
 
 -spec get_amazon_region() -> string()|undefined.
 get_amazon_region() ->
-    case httpc:request("http://169.254.169.254/latest/meta-data/placement/availability-zone") of
-        {ok,{_,_,"us-east-1"++_}} ->
-            "us-east-1";
-        {ok,{_,_,"us-west-1"++_}} ->
-            "us-west-1";
-        {ok,{_,_,"us-west-2"++_}} ->
-            "us-west-2";
-        {ok,{_,_,"eu-west-1"++_}} ->
-            "eu-west-1";
-        {ok,{_,_,"ap-southeast-1"++_}} ->
-            "ap-southeast-1";
-        {ok,{_,_,"ap-northeast-1"++_}} ->
-            "ap-northeast-1";
-        {error,E} ->
-            ?WARN("get_amazon_region returned with error ~p~n", [E]),
-            undefined
-    end.            
+    case get('availability-zone') of
+        undefined ->
+            case httpc:request("http://169.254.169.254/latest/meta-data/placement/availability-zone") of
+                {ok,{_,_,"us-east-1"++_}} ->
+                    put('availability-zone',"us-east-1");
+                {ok,{_,_,"us-west-1"++_}} ->
+                    put('availability-zone',"us-west-1");
+                {ok,{_,_,"us-west-2"++_}} ->
+                    put('availability-zone',"us-west-2");
+                {ok,{_,_,"eu-west-1"++_}} ->
+                    put('availability-zone',"eu-west-1");
+                {ok,{_,_,"ap-southeast-1"++_}} ->
+                    put('availability-zone',"ap-southeast-1");
+                {ok,{_,_,"ap-northeast-1"++_}} ->
+                    put('availability-zone',"ap-northeast-1");
+                {ok,{_,_,"sa-east-1"++_}} ->
+                    put('availability-zone',"sa-east-1");
+                {error,E} ->
+                    ?WARN("get_amazon_region returned with error ~p~n", [E]),
+                    undefined
+            end;
+        V ->
+            V
+    end.
 
 %%------------------------------------------------------------------------------
 %% metric API functions
@@ -909,5 +926,4 @@ str2ip(IPStr) ->
 take(N, L) -> 
     {FirstN, _} = lists:split(N, L),
     FirstN.
-    
-                  
+
