@@ -66,6 +66,7 @@
          partition/2,
         %use_high_priority_if_needed/0,
          is_amazon_instance/0,
+         get_amazon_region/0,
          get_amazon_instance_id/0,
          get_amazon_public_hostname/0,
          ip2str/1,
@@ -682,13 +683,15 @@ is_amazon_instance() ->
 get_amazon_instance_id() ->
     case get('instance-id') of
         undefined ->
-            case httpc:request("http://169.254.169.254/latest/meta-data/instance-id") of
-                {ok,{_,_,InstanceID}} ->
-                    put('instance-id',InstanceID);
-                {error, E} ->
-                    ?WARN("get_amazon_instance_id failed with error ~p~n", [E]),
-                    undefined
-            end;
+            Val = case httpc:request("http://169.254.169.254/latest/meta-data/instance-id") of
+                    {ok,{_,_,InstanceID}} ->
+                        InstanceID;
+                    {error, E} ->
+                        ?WARN("get_amazon_instance_id failed with error ~p~n", [E]),
+                        undefined
+                  end,
+            put('instance-id',Val),
+            Val;
         V -> 
             V
     end.
@@ -697,13 +700,15 @@ get_amazon_instance_id() ->
 get_amazon_public_hostname() ->
     case get('public-hostname') of
         undefined ->
-            case httpc:request("http://169.254.169.254/latest/meta-data/public-hostname") of
-                {ok,{_,_,PublicHostname}} ->
-                    put('public-hostname',PublicHostname);
-                {error, E} ->
-                    ?WARN("get_amazon_public_hostname with error ~p~n", [E]),
-                    undefined
-            end;
+            Val =   case httpc:request("http://169.254.169.254/latest/meta-data/public-hostname") of
+                        {ok,{_,_,PublicHostname}} ->
+                           PublicHostname;
+                        {error, E} ->
+                            ?WARN("get_amazon_public_hostname with error ~p~n", [E]),
+                            undefined
+                    end,
+            put('public-hostname',Val),
+            Val;
         V ->
             V
     end.
@@ -712,25 +717,27 @@ get_amazon_public_hostname() ->
 get_amazon_region() ->
     case get('availability-zone') of
         undefined ->
-            case httpc:request("http://169.254.169.254/latest/meta-data/placement/availability-zone") of
-                {ok,{_,_,"us-east-1"++_}} ->
-                    put('availability-zone',"us-east-1");
-                {ok,{_,_,"us-west-1"++_}} ->
-                    put('availability-zone',"us-west-1");
-                {ok,{_,_,"us-west-2"++_}} ->
-                    put('availability-zone',"us-west-2");
-                {ok,{_,_,"eu-west-1"++_}} ->
-                    put('availability-zone',"eu-west-1");
-                {ok,{_,_,"ap-southeast-1"++_}} ->
-                    put('availability-zone',"ap-southeast-1");
-                {ok,{_,_,"ap-northeast-1"++_}} ->
-                    put('availability-zone',"ap-northeast-1");
-                {ok,{_,_,"sa-east-1"++_}} ->
-                    put('availability-zone',"sa-east-1");
-                {error,E} ->
-                    ?WARN("get_amazon_region returned with error ~p~n", [E]),
-                    undefined
-            end;
+             Val =  case httpc:request("http://169.254.169.254/latest/meta-data/placement/availability-zone") of
+                        {ok,{_,_,"us-east-1"++_}} ->
+                            "us-east-1";
+                        {ok,{_,_,"us-west-1"++_}} ->
+                            "us-west-1";
+                        {ok,{_,_,"us-west-2"++_}} ->
+                            "us-west-2";
+                        {ok,{_,_,"eu-west-1"++_}} ->
+                            "eu-west-1";
+                        {ok,{_,_,"ap-southeast-1"++_}} ->
+                            "ap-southeast-1";
+                        {ok,{_,_,"ap-northeast-1"++_}} ->
+                            "ap-northeast-1";
+                        {ok,{_,_,"sa-east-1"++_}} ->
+                            "sa-east-1";
+                        {error,E} ->
+                            ?WARN("get_amazon_region returned with error ~p~n", [E]),
+                            undefined
+                    end,
+                put('availability-zone',Val),
+                Val;
         V ->
             V
     end.
