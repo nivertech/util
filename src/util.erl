@@ -66,12 +66,12 @@
          partition/2,
         %use_high_priority_if_needed/0,
          is_amazon_instance/0,
-         get_amazon_region/0,
          get_amazon_instance_id/0,
          get_amazon_public_hostname/0,
          ip2str/1,
          str2ip/1,
-         take/2
+         take/2,
+         http_get/1
         ]).
 
 -include_lib("include/types.hrl").
@@ -683,8 +683,8 @@ is_amazon_instance() ->
 get_amazon_instance_id() ->
     case get('instance-id') of
         undefined ->
-            Val = case httpc:request("http://169.254.169.254/latest/meta-data/instance-id") of
-                    {ok,{_,_,InstanceID}} ->
+            Val = case http_get("http://169.254.169.254/latest/meta-data/instance-id") of
+                    {ok,_,_,InstanceID} ->
                         InstanceID;
                     {error, E} ->
                         ?WARN("get_amazon_instance_id failed with error ~p~n", [E]),
@@ -700,8 +700,8 @@ get_amazon_instance_id() ->
 get_amazon_public_hostname() ->
     case get('public-hostname') of
         undefined ->
-            Val =   case httpc:request("http://169.254.169.254/latest/meta-data/public-hostname") of
-                        {ok,{_,_,PublicHostname}} ->
+            Val =   case http_get("http://169.254.169.254/latest/meta-data/public-hostname") of
+                        {ok,_,_,PublicHostname} ->
                            PublicHostname;
                         {error, E} ->
                             ?WARN("get_amazon_public_hostname with error ~p~n", [E]),
@@ -717,20 +717,20 @@ get_amazon_public_hostname() ->
 get_amazon_region() ->
     case get('availability-zone') of
         undefined ->
-             Val =  case httpc:request("http://169.254.169.254/latest/meta-data/placement/availability-zone") of
-                        {ok,{_,_,"us-east-1"++_}} ->
+             Val =  case http_get("http://169.254.169.254/latest/meta-data/placement/availability-zone") of
+                        {ok,_,_,"us-east-1"++_} ->
                             "us-east-1";
-                        {ok,{_,_,"us-west-1"++_}} ->
+                        {ok,_,_,"us-west-1"++_} ->
                             "us-west-1";
-                        {ok,{_,_,"us-west-2"++_}} ->
+                        {ok,_,_,"us-west-2"++_} ->
                             "us-west-2";
-                        {ok,{_,_,"eu-west-1"++_}} ->
+                        {ok,_,_,"eu-west-1"++_} ->
                             "eu-west-1";
-                        {ok,{_,_,"ap-southeast-1"++_}} ->
+                        {ok,_,_,"ap-southeast-1"++_} ->
                             "ap-southeast-1";
-                        {ok,{_,_,"ap-northeast-1"++_}} ->
+                        {ok,_,_,"ap-northeast-1"++_} ->
                             "ap-northeast-1";
-                        {ok,{_,_,"sa-east-1"++_}} ->
+                        {ok,_,_,"sa-east-1"++_} ->
                             "sa-east-1";
                         {error,E} ->
                             ?WARN("get_amazon_region returned with error ~p~n", [E]),
@@ -934,3 +934,7 @@ take(N, L) ->
     {FirstN, _} = lists:split(N, L),
     FirstN.
 
+%% @doc simple http get
+-spec http_get(string()) -> {ok, string(), [{string(), string()}], string()}|{error, term()}.
+http_get(URL) ->
+    ibrowse:send_req(URL, [], get).
