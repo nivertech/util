@@ -32,6 +32,8 @@
          random_elem/1,
          is_guid/1,
          is_guid2/1,
+         is_guid_with_slash/1,
+         is_guid_with_slash2/1,
          is_guid_without_colon/1,
          is_guid_without_colon2/1,
          is_jsonp_method_ok/1,
@@ -322,6 +324,19 @@ is_guid(S)
 is_guid(_) -> false.
  
 %%------------------------------------------------------------------------------
+%% @doc is GUID string, i.e. alphanumeric or '-' (dash) or ':' or '/' - minimum 1 character
+%% for example:
+%%  258EAFA5-E914-47DA-95CA-C5AB0DC85B11
+%% @end
+%%------------------------------------------------------------------------------
+-spec is_guid_with_slash(S::binary()) -> boolean().
+is_guid_with_slash(S) 
+    when byte_size(S) >= 1 
+    ->
+    is_guid_with_slash2(S);
+is_guid_with_slash(_) -> false.
+
+%%------------------------------------------------------------------------------
 %% @doc is GUID string, i.e. alphanumeric or '-' (dash) or ':'
 %% for example:
 %%  258EAFA5-E914-47DA-95CA-C5AB0DC85B11
@@ -340,6 +355,28 @@ is_guid2(<<Ch:8,Rest/bytes>>)
     -> 
     is_guid2(Rest); 
 is_guid2(S) when is_binary(S) ->
+    false. 
+
+%%------------------------------------------------------------------------------
+%% @doc is GUID string, i.e. alphanumeric or '-' (dash) or ':' or '/'
+%% for example:
+%%  258EAFA5-E914-47DA-95CA-C5AB0DC85B11
+%% @end
+%%------------------------------------------------------------------------------
+-spec is_guid_with_slash2(S::binary()) -> boolean().
+is_guid_with_slash2(<<>>) ->
+    true; 
+is_guid_with_slash2(<<Ch:8,Rest/bytes>>) 
+    when 
+        (($A=<Ch) andalso (Ch=<$Z)) orelse 
+        (($a=<Ch) andalso (Ch=<$z)) orelse 
+        (($0=<Ch) andalso (Ch=<$9)) orelse
+         (Ch==$-) orelse
+         (Ch==$:) orelse
+         (Ch==$/)
+    -> 
+    is_guid2(Rest); 
+is_guid_with_slash2(S) when is_binary(S) ->
     false. 
 
 %%------------------------------------------------------------------------------
