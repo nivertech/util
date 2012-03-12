@@ -375,7 +375,7 @@ is_guid_with_slash2(<<Ch:8,Rest/bytes>>)
          (Ch==$:) orelse
          (Ch==$/)
     -> 
-    is_guid2(Rest); 
+    is_guid_with_slash2(Rest); 
 is_guid_with_slash2(S) when is_binary(S) ->
     false. 
 
