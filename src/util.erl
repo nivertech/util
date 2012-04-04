@@ -50,6 +50,7 @@
          get_key_value/3,
          merge_proplists/2,
          powerset/1,
+         list_intersect/2,
          format_utc_timestamp/0,
          format_datetime_sec/1,
          format_datetime_min/1,
@@ -666,6 +667,14 @@ powerset([H|T]) ->
     P = powerset(T),
     [[H]] ++ [ [H|X] || X<-P ] ++ P.
 
+%%------------------------------------------------------------------------------
+%% @doc Calculate Powerset, i.e. all subsets except for empty set of elements
+%% @see [http://en.wikipedia.org/wiki/Power_set]
+%% @end
+%%------------------------------------------------------------------------------
+-spec list_intersect(list(), list()) -> list().
+list_intersect(L1, L2) ->
+    lists:filter(fun(X) -> lists:member(X, L1) end, L2).
 
 %%------------------------------------------------------------------------------
 %% @doc format UTC Date and Time timestamp (where ZZZ is miliseconds)
