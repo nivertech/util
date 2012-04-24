@@ -74,7 +74,8 @@
          ip2str/1,
          str2ip/1,
          take/2,
-         http_get/1
+         http_get/1,
+         strip_binary_whitespace/2
         ]).
 
 -include_lib("include/types.hrl").
@@ -984,3 +985,12 @@ take(N, L) ->
 -spec http_get(string()) -> {ok, string(), [{string(), string()}], string()}|{error, term()}.
 http_get(URL) ->
     ibrowse:send_req(URL, [], get).
+
+%% @doc strips whitespaces from a binary (similar to string:strip)
+-spec strip_binary_whitespace(binary(), left|right|both) -> binary().
+strip_binary_whitespace(Bin, both) ->
+    re:replace(Bin, <<"^\\s+|\\s+\$">>, "", [{return, binary}, global]);
+strip_binary_whitespace(Bin, left) ->
+    re:replace(Bin, <<"^\\s+">>, "", [{return, binary}]);
+strip_binary_whitespace(Bin, right) ->
+    re:replace(Bin, <<"\\s+\$">>, "", [{return, binary}]).
