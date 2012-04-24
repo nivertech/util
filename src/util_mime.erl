@@ -20,11 +20,15 @@
 %%------------------------------------------------------------------------------
 -spec guess_mime(Filename::string()) -> binary().
 guess_mime(Filename) ->
-    ExtWithoutDot = case filename:extension(Filename) of
-                        [$.|Ext] -> Ext;
-                        OtherExt -> OtherExt
-                    end,
-    case from_ext(list_to_binary(ExtWithoutDot)) of
+    ExtWithoutDot0 = case filename:extension(Filename) of
+                         [$.|Ext] -> Ext;
+                         OtherExt -> OtherExt
+                     end,
+    ExtWithoutDot = case is_binary(ExtWithoutDot0) of
+        true -> ExtWithoutDot0;
+        false -> list_to_binary(ExtWithoutDot0)
+    end,
+    case ExtWithoutDot of
         undefined   -> <<"text/plain">>;
         Mime        -> Mime
     end.
