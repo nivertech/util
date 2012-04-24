@@ -9,8 +9,9 @@
 %%% @end
 %%%-----------------------------------------------------------------------------
 
--ifndef(TYPES_HRL).
--define(TYPES_HRL, true).
+-ifndef(UTIL_TYPES_HRL).
+-define(UTIL_TYPES_HRL, 1).
+
 
 %% new proplist type introduced in R14B04
 %-type proplist()   :: [{atom(),any()} | atom()].
@@ -42,6 +43,7 @@
                             datetime()
                         }
                     }. % unit.
+
 -ifndef(NO_ERLCLOUD_TYPES).
 -type(datetime() :: {{pos_integer(), 1..12, 1..31}, {0..23, 0..59, 0..60}}).
 %%------------------------------------------------------------------------------
@@ -58,5 +60,7 @@
 -type statistic_set() :: #statistic_set{}.
 -type(proplist() :: [{atom(), term()}|term()]).
 -endif. %% NO_ERLCLOUD_TYPES
--endif. %% TYPES_HRL
+
+
+-endif. %% UTIL_TYPES_HRL
 

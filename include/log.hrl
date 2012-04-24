@@ -9,8 +9,9 @@
 %%% @end
 %%%-----------------------------------------------------------------------------
 
--ifndef(LOG_HRL).
--define(LOG_HRL, true).
+-ifndef(UTIL_LOG_HRL).
+-define(UTIL_LOG_HRL, 1).
+
 
 %-define(USE_LOG4ERL).
 -undef(USE_LOG4ERL).
@@ -114,5 +115,6 @@
     -define(FATAL(Fmt, Args), todo).%TODO
 -endif.
 
--endif. %% LOG_HRL
+
+-endif. %% UTIL_LOG_HRL
 
