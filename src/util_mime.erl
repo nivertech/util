@@ -28,7 +28,7 @@ guess_mime(Filename) ->
         true -> ExtWithoutDot0;
         false -> list_to_binary(ExtWithoutDot0)
     end,
-    case ExtWithoutDot of
+    case from_ext(ExtWithoutDot) of
         undefined   -> <<"text/plain">>;
         Mime        -> Mime
     end.
