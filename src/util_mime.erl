@@ -21,8 +21,9 @@
 -spec guess_mime(Filename::string()) -> binary().
 guess_mime(Filename) ->
     ExtWithoutDot0 = case filename:extension(Filename) of
-                         [$.|Ext] -> Ext;
-                         OtherExt -> OtherExt
+                         [$.|Ext]          -> Ext;
+                         <<$.,Ext/bytes>>  -> Ext;
+                         OtherExt          -> OtherExt
                      end,
     ExtWithoutDot = case is_binary(ExtWithoutDot0) of
         true -> ExtWithoutDot0;
