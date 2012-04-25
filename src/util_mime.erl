@@ -41,7 +41,7 @@ guess_mime(Filename) ->
 %% @end
 %%------------------------------------------------------------------------------
 -spec from_ext(FileExt::binary()) -> binary() | undefined.
-from_ext(<<>>)             -> <<>>;
+from_ext(<<>>)             -> <<"application/octet-stream">>;
 from_ext(<<"stl">>)        -> <<"application/SLA">>;
 from_ext(<<"stp">>)        -> <<"application/STEP">>;
 from_ext(<<"step">>)       -> <<"application/STEP">>;
