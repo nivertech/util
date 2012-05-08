@@ -509,8 +509,8 @@ int_ceil(X) ->
 %% @doc check if string is numeric
 %% @end
 %%------------------------------------------------------------------------------
--spec is_numeric(L::string()) -> boolean().
-is_numeric(L) ->
+-spec is_numeric(L::string()|binary()) -> boolean().
+is_numeric(L) when is_list(L) ->
     try erlang:list_to_integer(L) of
         _ -> true
     catch
@@ -520,6 +520,11 @@ is_numeric(L) ->
             catch
                 _:_ -> false
             end
+    end;
+is_numeric(B) when is_binary(B) ->
+    case re:run(B, <<"^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\$">>) of
+        {match, _} -> true;
+        nomatch -> false
     end.
 
 %%------------------------------------------------------------------------------
