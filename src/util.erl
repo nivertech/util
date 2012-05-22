@@ -37,6 +37,7 @@
          is_guid_without_colon/1,
          is_guid_without_colon2/1,
          is_jsonp_method_ok/1,
+         is_email/1,
          num_to_float/1,
          int_floor/1,
          int_ceil/1,
@@ -472,6 +473,15 @@ is_digit(_) -> false.
 -spec is_jsonp_method_ok(JSONPMethod::binary()) -> boolean().
 is_jsonp_method_ok(JSONPMethod) ->
     is_identifier2(JSONPMethod).
+
+%%------------------------------------------------------------------------------
+%% @doc is email valid?
+%% @end
+%%------------------------------------------------------------------------------
+-spec is_email(Email::binary()) -> boolean().
+is_email(Email) ->
+    %% see http://www.regular-expressions.info/email.html
+    re:run(Email, <<"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}\$">>) =/= nomatch. 
 
 %%------------------------------------------------------------------------------
 %% @doc convert numeric value to float
