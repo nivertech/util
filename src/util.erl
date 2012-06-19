@@ -46,6 +46,7 @@
          json_field/2,
          json_field/3,
          equals_or_undefined/2,
+         error_tup_to_undefined/1,
          riak_connect/0,
          get_key_value/2,           
          get_key_value/3,
@@ -583,6 +584,15 @@ json_field(Field, JSON) ->
 -spec equals_or_undefined(Value::any(), X::any()) -> boolean().
 equals_or_undefined(Value, X) ->
     (Value == undefined) orelse (Value == X).
+
+%%------------------------------------------------------------------------------
+%% @doc If a value is equal to {error, _}, replaces it with undefined. 
+%% Otherwise, does nothing.
+%% @end
+%%------------------------------------------------------------------------------
+-spec error_tup_to_undefined(term()) -> term().
+error_tup_to_undefined({error, _}) -> undefined;
+error_tup_to_undefined(X) -> X.
 
 %%------------------------------------------------------------------------------
 %% @doc connects to one of the riak nodes
