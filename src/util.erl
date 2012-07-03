@@ -77,7 +77,8 @@
          str2ip/1,
          take/2,
          http_get/1,
-         strip_binary_whitespace/2
+         strip_binary_whitespace/2,
+         remove_default_port/1
         ]).
 
 -include_lib("include/types.hrl").
@@ -1019,3 +1020,13 @@ strip_binary_whitespace(Bin, left) ->
     re:replace(Bin, <<"^\\s+">>, "", [{return, binary}]);
 strip_binary_whitespace(Bin, right) ->
     re:replace(Bin, <<"\\s+\$">>, "", [{return, binary}]).
+
+%% @doc removes port from URI in case it is default port for URI schema (currently supports: HTTP/80, HTTPS/443)
+-spec remove_default_port(URI::binary()) -> binary().
+remove_default_port(URI = <<"http://",_/bytes>>) ->
+    re:replace(URI, <<"http://([^/]+):80(/.*)?">>, <<"http://\\1\\2">>); 
+remove_default_port(URI = <<"https://",_/bytes>>) ->
+    re:replace(URI, <<"https://([^/]+):443(/.*)?">>, <<"https://\\1\\2">>);
+remove_default_port(URI) ->
+    URI.
+    
