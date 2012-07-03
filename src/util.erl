@@ -1024,9 +1024,9 @@ strip_binary_whitespace(Bin, right) ->
 %% @doc removes port from URI in case it is default port for URI schema (currently supports: HTTP/80, HTTPS/443)
 -spec remove_default_port(URI::binary()) -> binary().
 remove_default_port(URI = <<"http://",_/bytes>>) ->
-    re:replace(URI, <<"http://([^/]+):80(/.*)?">>, <<"http://\\1\\2">>); 
+    re:replace(URI, <<"http://([^/]+):80(/.*)?">>, <<"http://\\1\\2">>, [{return, binary}]); 
 remove_default_port(URI = <<"https://",_/bytes>>) ->
-    re:replace(URI, <<"https://([^/]+):443(/.*)?">>, <<"https://\\1\\2">>);
+    re:replace(URI, <<"https://([^/]+):443(/.*)?">>, <<"https://\\1\\2">>, [{return, binary}]);
 remove_default_port(URI) ->
     URI.
     
