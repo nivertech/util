@@ -1026,9 +1026,9 @@ strip_binary_whitespace(Bin, right) ->
 remove_default_port(URI) when is_list(URI) ->
     remove_default_port(list_to_binary(URI));
 remove_default_port(<<"http://", _/bytes>>=URI) ->
-    re:replace(URI, <<"http://([^/]+):80(/.*)?\$">>, <<"http://\\1\\2">>, []);
+    re:replace(URI, <<"http://([^/]+):80(/.*)?\$">>, <<"http://\\1\\2">>, [{return, binary}]);
 remove_default_port(<<"https://", _/bytes>>=URI) ->
-    re:replace(URI, <<"https://([^/]+):443(/.*)?\$">>, <<"https://\\1\\2">>, []);
+    re:replace(URI, <<"https://([^/]+):443(/.*)?\$">>, <<"https://\\1\\2">>, [{return, binary}]);
 remove_default_port(URI) ->
     URI.
 
