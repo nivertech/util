@@ -27,6 +27,7 @@
          binary_to_hex_bin/1,
          to_s/1,
          mem_to_s/1,
+         to_i/1,
          random_between/2,
          random_between_int/2,
          random_elem/1,
@@ -290,6 +291,16 @@ mem_to_s(MemBytes) when MemBytes > 1024 ->
     io_lib:format("~.3f KB", [MemBytes / 1024]);
 mem_to_s(MemBytes) ->
     io_lib:format("~b B", [MemBytes]).
+
+%%------------------------------------------------------------------------------
+%% @doc converts a list or a binary to an integer
+%% @end
+%%------------------------------------------------------------------------------
+-spec to_i(L::string()|binary()) -> integer().
+to_i(L) when is_list(L) ->
+    list_to_integer(L);
+to_i(B) when is_binary(B) ->
+    list_to_integer(binary_to_list(B)).
 
 %%------------------------------------------------------------------------------
 %% @doc generate random float number from the range [A,B]
